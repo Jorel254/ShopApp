@@ -1,0 +1,7 @@
+<div class="join gap-2">
+  @for (page of pagesArray(); track $index) {
+  <button class="join-item btn btn-square" [routerLink]="[]" [class.btn-primary]=" page === activePage()"
+    [queryParams]="{ page: page }" (click)="activePage.set(page)">{{
+    page }}</button>
+  }
+</div>

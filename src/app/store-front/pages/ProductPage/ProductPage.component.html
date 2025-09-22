@@ -1,0 +1,118 @@
+@if (productResource.value(); as product) {
+<div class="container mx-auto px-4 py-8">
+  <!-- Breadcrumb -->
+  <div class="breadcrumbs text-sm mb-6">
+    <ul>
+      <li><a href="/" class="link link-hover">Inicio</a></li>
+      <li><a href="/" class="link link-hover">Productos</a></li>
+      <li class="text-primary font-semibold">{{product.title}}</li>
+    </ul>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- Imágenes del producto -->
+    <div class="space-y-4">
+      <!-- Imagen principal -->
+      <div class="aspect-square bg-base-200 rounded-lg overflow-hidden">
+        <img [src]="product.images | appImageProduct: idImage()" [alt]="product.title"
+          class="w-full h-full object-cover" />
+      </div>
+
+      <!-- Galería de imágenes -->
+      @if (product.images && product.images.length > 1) {
+      <div class="grid grid-cols-4 gap-2">
+        @for (image of product.images; track $index) {
+        <div
+          class="aspect-square bg-base-200 rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity"
+          (click)="changeIdImage($index)">
+          <img [src]="image | appImageProduct: $index" [alt]="product.title + ' - ' + ($index + 1)"
+            class="w-full h-full object-cover" />
+        </div>
+        }
+      </div>
+      }
+    </div>
+
+    <!-- Información del producto -->
+    <div class="space-y-6">
+      <!-- Título y precio -->
+      <div>
+        <h1 class="text-3xl font-bold font-epunda text-primary mb-2">{{product.title}}</h1>
+        <div class="flex items-center gap-4">
+          <span class="text-3xl font-bold text-secondary">${{product.price | number:'1.2-2'}}</span>
+          @if (product.stock > 0) {
+          <div class="badge badge-success">En stock</div>
+          } @else {
+          <div class="badge badge-error">Sin stock</div>
+          }
+        </div>
+      </div>
+
+      <!-- Descripción -->
+      <div>
+        <h3 class="text-lg font-semibold mb-2">Descripción</h3>
+        <p class="text-gray-600 leading-relaxed">{{product.description}}</p>
+      </div>
+
+      <!-- Tallas -->
+      @if (product.sizes && product.sizes.length > 0) {
+      <div>
+        <h3 class="text-lg font-semibold mb-3">Tallas disponibles</h3>
+        <div class="flex flex-wrap gap-2">
+          @for (size of product.sizes; track size) {
+          <button class="btn btn-outline btn-sm">{{size}}</button>
+          }
+        </div>
+      </div>
+      }
+
+      <!-- Género y etiquetas -->
+      <div class="flex flex-wrap gap-4">
+        <div>
+          <span class="text-sm text-gray-500">Género:</span>
+          <span class="badge badge-neutral ml-1">{{product.gender | titlecase}}</span>
+        </div>
+        @if (product.tags && product.tags.length > 0) {
+        <div>
+          <span class="text-sm text-gray-500">Etiquetas:</span>
+          @for (tag of product.tags; track tag) {
+          <span class="badge badge-outline ml-1">{{tag}}</span>
+          }
+        </div>
+        }
+      </div>
+
+      <!-- Stock -->
+      <div class="text-sm text-gray-600">
+        <span class="font-semibold">Stock disponible:</span> {{product.stock}} unidades
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="flex gap-4 pt-4">
+        <button class="btn btn-primary flex-1" [disabled]="product.stock === 0">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01">
+            </path>
+          </svg>
+          Agregar al carrito
+        </button>
+        <button class="btn btn-outline">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+            </path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+} @else {
+<!-- Loading state -->
+<div class="container mx-auto px-4 py-8">
+  <div class="flex justify-center items-center h-64">
+    <span class="loading loading-spinner loading-lg"></span>
+  </div>
+</div>
+}

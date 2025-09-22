@@ -1,1 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+@plugin "daisyui" {
+  themes: light --default, dracula --prefersdark, cupcake
+}
+@theme {
+  --font-epunda: "EpundaSlab", "sans-serif"
+}
+@layer base {
+  @font-face {
+    font-family: "EpundaSlab";
+    src: url("../public/assets/fonts/EpundaSlab-Medium.ttf") format("truetype");
+  }
+}

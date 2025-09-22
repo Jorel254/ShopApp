@@ -1,0 +1,53 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1200px;
+}
+
+.aspect-square {
+  aspect-ratio: 1 / 1;
+}
+
+.breadcrumbs ul {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.breadcrumbs li:not(:last-child)::after {
+  content: '>';
+  margin-left: 0.5rem;
+  color: #6b7280;
+}
+
+/* Animaciones suaves */
+img {
+  transition: transform 0.3s ease;
+}
+
+img:hover {
+  transform: scale(1.05);
+}
+
+/* Estilos para los botones de talla */
+.btn-outline.btn-sm {
+  min-width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .grid {
+    gap: 1.5rem;
+  }
+}

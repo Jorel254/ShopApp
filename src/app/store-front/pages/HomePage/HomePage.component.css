@@ -1,0 +1,11 @@
+:host {
+  display: block;
+}
+
+.grid {
+  align-items: stretch;
+}
+
+.grid > * {
+  height: 100%;
+}

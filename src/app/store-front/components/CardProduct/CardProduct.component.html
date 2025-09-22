@@ -1,0 +1,16 @@
+<div class="card card-compact bg-base-100 shadow-xl fadeIn">
+  <figure class="px-10 pt-10">
+    <img [src]="product()?.images | appImageProduct" alt="Shoes" class="rounded-xl" />
+  </figure>
+  <div class="card-body items-center text-center">
+    <h2 class="card-title font-bold font-epunda text-xl text-primary cursor-pointer hover:underline"
+      [routerLink]="['/product', product()?.slug]" routerLinkActive="text-secondary">{{product()?.title}}</h2>
+    <p class="text-sm text-gray-500 text-justify">
+      {{product()?.description}}
+    </p>
+    <div class="card-actions">
+      <a [routerLink]="['/product', product()?.slug]" routerLinkActive="text-secondary" class="link link-accent">Ver
+        producto</a>
+    </div>
+  </div>
+</div>
