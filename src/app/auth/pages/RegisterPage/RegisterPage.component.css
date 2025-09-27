@@ -1,0 +1,28 @@
+:host {
+  display: block;
+}
+
+/* Estilos para inputs con error */
+.input-error {
+  @apply border-error focus:border-error;
+}
+
+/* Animación suave para el botón de carga */
+.btn.loading {
+  @apply cursor-not-allowed;
+}
+
+/* Espaciado consistente entre campos */
+.form-control {
+  @apply mb-4;
+}
+
+/* Estilos para mensajes de error */
+.label-text-alt.text-error {
+  @apply text-sm;
+}
+
+/* Hover effect para enlaces */
+.font-epunda.cursor-pointer:hover {
+  @apply text-primary-focus;
+}

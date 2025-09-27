@@ -23,4 +23,26 @@
       <li><a routerLink="gender/kid" routerLinkActive="text-secondary" class="font-bold font-epunda">Niños</a></li>
     </ul>
   </div>
+  <div class="navbar-end gap-4">
+    @if (authService.authStatus() === 'authenticated') {
+    <button class="btn btn-ghost">
+      <span class="font-bold">{{authService.user()?.fullName}}</span>
+    </button>
+    <button class="btn btn-circle btn-error" (click)="authService.logout()">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+      </svg>
+    </button>
+    }
+    @else if (authService.authStatus() === 'not-authenticated') {
+    <button class="btn btn-ghost" routerLink="/auth/login">
+      <span class="font-bold">Login</span>
+    </button>
+    }
+    @else {
+    <a class="btn btn-ghost">...</a>
+    }
+
+  </div>
 </div>

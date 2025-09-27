@@ -1,0 +1,55 @@
+<div class="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+  <div class="card-body">
+    <h2 class="card-title text-2xl font-epunda text-center mb-6">Crear Cuenta</h2>
+
+    <form class="space-y-4" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <!-- Campo Nombre Completo -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text font-medium">Nombre Completo</span>
+        </label>
+        <input type="text" class="input input-bordered w-full" placeholder="Ingresa tu nombre completo" formControlName="name" />
+      </div>
+
+      <!-- Campo Email -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text font-medium">Email</span>
+        </label>
+        <input type="email" class="input input-bordered w-full" placeholder="tu@email.com" formControlName="email" />
+      </div>
+
+      <!-- Campo Contraseña -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text font-medium">Contraseña</span>
+        </label>
+        <input type="password" class="input input-bordered w-full" placeholder="Mínimo 6 caracteres" formControlName="password" />
+      </div>
+
+      <!-- Campo Confirmar Contraseña -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text font-medium">Confirmar Contraseña</span>
+        </label>
+        <input type="password" class="input input-bordered w-full" placeholder="Repite tu contraseña" formControlName="confirmPassword" />
+      </div>
+
+      <!-- Botón de Registro -->
+      <div class="form-control mt-6">
+        <button type="submit" class="btn btn-primary w-full">
+          Crear Cuenta
+        </button>
+      </div>
+    </form>
+
+    <!-- Enlace a Login -->
+    <div class="divider">o</div>
+    <p class="text-center text-sm">
+      ¿Ya tienes una cuenta?
+      <a class="font-epunda cursor-pointer hover:underline text-primary" routerLink="/auth/login">
+        Inicia sesión
+      </a>
+    </p>
+  </div>
+</div>

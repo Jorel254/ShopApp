@@ -1,0 +1,23 @@
+<div class="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+  <form class="card-body" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <fieldset class="fieldset">
+      <label class="label">Email</label>
+      <input type="email" class="input" placeholder="Email" formControlName="email" />
+      <label class="label">Password</label>
+      <input type="password" class="input" placeholder="Password" formControlName="password" />
+      <div><a class="link link-hover">Forgot password?</a></div>
+      <button type="submit" class="btn btn-primary w-full mt-4">Login</button>
+      <p class="text-center text-sm">¿No tienes una cuenta? <a
+          class="font-epunda cursor-pointer hover:underline text-primary" routerLink="/auth/register">Regístrate</a></p>
+    </fieldset>
+  </form>
+  @if (hasError()) {
+  <div role="alert" class="alert alert-error fixed bottom-5 right-5 w-90">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <span class="text-center">Email o contraseña incorrectos.</span>
+  </div>
+  }
+</div>
