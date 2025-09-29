@@ -7,9 +7,15 @@
         </svg>
       </div>
       <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-        <li><a routerLink="gender/men" routerLinkActive="text-secondary" class="font-bold">Hombres</a></li>
-        <li><a routerLink="gender/women" routerLinkActive="text-secondary" class="font-bold">Mujeres</a></li>
-        <li><a routerLink="gender/kid" routerLinkActive="text-secondary" class="font-bold">Niños</a></li>
+        <li>
+          <a routerLink="gender/men" routerLinkActive="text-secondary" class="font-bold">Hombres</a>
+        </li>
+        <li>
+          <a routerLink="gender/women" routerLinkActive="text-secondary" class="font-bold">Mujeres</a>
+        </li>
+        <li>
+          <a routerLink="gender/kid" routerLinkActive="text-secondary" class="font-bold">Niños</a>
+        </li>
       </ul>
     </div>
     <a class="btn btn-ghost text-xl font-epunda" routerLink="/">Teslo
@@ -18,15 +24,23 @@
   </div>
   <div class="navbar-center hidden lg:flex">
     <ul class="menu menu-horizontal px-1">
-      <li><a routerLink="gender/men" routerLinkActive="text-secondary" class="font-bold font-epunda">Hombres</a></li>
-      <li><a routerLink="gender/women" routerLinkActive="text-secondary" class="font-bold font-epunda">Mujeres</a></li>
-      <li><a routerLink="gender/kid" routerLinkActive="text-secondary" class="font-bold font-epunda">Niños</a></li>
+      <li>
+        <a routerLink="gender/men" routerLinkActive="text-secondary" class="font-bold font-epunda">Hombres</a>
+      </li>
+      <li>
+        <a routerLink="gender/women" routerLinkActive="text-secondary" class="font-bold font-epunda">Mujeres</a>
+      </li>
+      <li>
+        <a routerLink="gender/kid" routerLinkActive="text-secondary" class="font-bold font-epunda">Niños</a>
+      </li>
     </ul>
   </div>
   <div class="navbar-end gap-4">
-    @if (authService.authStatus() === 'authenticated') {
+    @if (authService.validateRoleUser('admin')) {
+    <a class="btn btn-ghost" routerLink="/admin/products">Panel de administración</a>
+    } @if (authService.authStatus() === 'authenticated') {
     <button class="btn btn-ghost">
-      <span class="font-bold">{{authService.user()?.fullName}}</span>
+      <span class="font-bold">{{ authService.user()?.fullName }}</span>
     </button>
     <button class="btn btn-circle btn-error" (click)="authService.logout()">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -34,15 +48,12 @@
           d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
       </svg>
     </button>
-    }
-    @else if (authService.authStatus() === 'not-authenticated') {
+    } @else if (authService.authStatus() === 'not-authenticated') {
     <button class="btn btn-ghost" routerLink="/auth/login">
       <span class="font-bold">Login</span>
     </button>
-    }
-    @else {
+    } @else {
     <a class="btn btn-ghost">...</a>
     }
-
   </div>
 </div>

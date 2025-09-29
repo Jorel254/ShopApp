@@ -1,7 +1,7 @@
 <h1 class="text-2xl font-bold font-epunda p-4">Todos los productos</h1>
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-  @for (product of productsResource.value()?.products; track $index) {
+  @for (product of productsResource.value().products; track $index) {
   <app-card-product [product]="product"></app-card-product>
   }
   @empty {
@@ -11,5 +11,5 @@
   }
 </div>
 <div class="flex justify-center items-center mt-4">
-  <app-pagination [pages]="productsResource.value()?.pages ?? 1 " [currentPage]="currentPage()"></app-pagination>
+  <app-pagination [pages]="productsResource.value().pages" [currentPage]="currentPage()"></app-pagination>
 </div>

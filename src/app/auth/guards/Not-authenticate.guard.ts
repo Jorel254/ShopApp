@@ -4,7 +4,7 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
-export const NotAuthenticateGuard: CanMatchFn = async (route, segments) => {
+export const NotAuthenticateGuard: CanMatchFn = async (_route, _segments) => {
   const authService = inject(AuthService);
   const router = inject(Router);
   const isAuthenticated = await firstValueFrom(authService.checkAuthStatus());

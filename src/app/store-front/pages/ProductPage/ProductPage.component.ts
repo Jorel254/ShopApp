@@ -20,8 +20,8 @@ export class ProductPageComponent {
 
   productResource: ResourceRef<Product> = rxResource({
     request: () => ({}),
-    loader: ({}) => {
-      return this.productsService.getProductById(this.productId());
+    loader: () => {
+      return this.productsService.getProductBySlug(this.productId());
     },
   } as any);
 

@@ -1,0 +1,108 @@
+<div class="overflow-x-auto">
+  <table class="table">
+    <!-- head -->
+    <thead>
+      <tr>
+        <th>
+          <label>
+            <input type="checkbox" class="checkbox" />
+          </label>
+        </th>
+        <th>Nombre del producto</th>
+        <th>Precio</th>
+        <th>Stock</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- row 1 -->
+      @for (product of products(); track product.id) {
+      <tr>
+        <th>
+          <label>
+            <input type="checkbox" class="checkbox" />
+          </label>
+        </th>
+        <td>
+          <div class="flex items-center gap-3">
+            <div class="avatar">
+              <div class="mask mask-squircle h-12 w-12">
+                <img [src]="product?.images | appImageProduct" [alt]="product.title" />
+              </div>
+            </div>
+            <div>
+              <div class="card-title font-bold font-epunda text-xl text-primary cursor-pointer hover:underline"><a [routerLink]="['/admin/product', product?.id]"
+                  routerLinkActive="text-secondary">{{product?.title}}>{{product.title}}</a></div>
+              <div class="text-sm opacity-50"> @for (size of product.sizes; track size) {
+                <span class="badge badge-outline">{{size}}</span>
+                }
+              </div>
+            </div>
+          </div>
+        </td>
+        <td>
+          {{product.price | currency}}
+        </td>
+        <td>
+          <div class="stock-container">
+            @if (product.stock <= 0) { <!-- Sin stock -->
+              <div class="stock-badge stock-empty">
+                <svg class="stock-icon" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                    clip-rule="evenodd"></path>
+                </svg>
+                <span style="font-size: 10px;">Sin stock</span>
+              </div>
+              } @else if (product.stock <= 5) { <!-- Stock crítico -->
+                <div class="stock-badge stock-critical">
+                  <svg class="stock-icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                      d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                      clip-rule="evenodd"></path>
+                  </svg>
+                  <span>{{product.stock}}</span>
+                </div>
+                } @else if (product.stock <= 15) { <!-- Stock bajo -->
+                  <div class="stock-badge stock-low">
+                    <svg class="stock-icon" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clip-rule="evenodd"></path>
+                    </svg>
+                    <span>{{product.stock}}</span>
+                  </div>
+                  } @else if (product.stock <= 30) { <!-- Stock medio -->
+                    <div class="stock-badge stock-medium">
+                      <svg class="stock-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.293l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z"
+                          clip-rule="evenodd"></path>
+                      </svg>
+                      <span>{{product.stock}}</span>
+                    </div>
+                    } @else {
+                    <!-- Stock alto -->
+                    <div class="stock-badge stock-high">
+                      <svg class="stock-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.293l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z"
+                          clip-rule="evenodd"></path>
+                      </svg>
+                      <span>{{product.stock}}</span>
+                    </div>
+                    }
+          </div>
+        </td>
+        <th>
+          <a [routerLink]="['/admin/product', product?.id]" routerLinkActive="text-secondary"
+            class="link link-accent">Ver</a>
+        </th>
+      </tr>
+      } @empty {
+      <tr>
+        <td colspan="5" class="text-center">No hay productos</td>
+      </tr>
+      }
+  </table>
+</div>

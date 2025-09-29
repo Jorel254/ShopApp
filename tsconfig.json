@@ -10,7 +10,8 @@
       "@store-front/*": ["src/app/store-front/*"],
       "@shared/*": ["src/app/shared/*"],
       "@auth/*": ["src/app/auth/*"],
-      "@admin/*": ["src/app/admin-dashboard/*"]
+      "@admin/*": ["src/app/admin-dashboard/*"],
+      "@utils/*": ["src/app/utils/*"]
     },
     "strict": true,
     "noImplicitOverride": true,

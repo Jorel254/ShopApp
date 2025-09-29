@@ -13,8 +13,8 @@ const baseUrl = environment.baseUrl;
 export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly _authStatus = signal<AuthStatus>('checking');
-  private _user = signal<User | null>(null);
-  private _token = signal<string | null>(sessionStorage.getItem('token'));
+  private readonly _user = signal<User | null>(null);
+  private readonly _token = signal<string | null>(sessionStorage.getItem('token'));
 
   authStatus = computed(() => {
     if (this._authStatus() === 'checking') return 'checking';
@@ -23,7 +23,7 @@ export class AuthService {
   });
 
   checkStatusResourece = rxResource({
-    loader: ({}) => {
+    loader: () => {
       return this.checkAuthStatus();
     },
   } as any);
@@ -86,6 +86,10 @@ export class AuthService {
           return of(false);
         })
       );
+  }
+
+  validateRoleUser(role: string): boolean {
+    return this.user()?.roles.includes(role) ?? false;
   }
 
   private cleanAuthData() {
