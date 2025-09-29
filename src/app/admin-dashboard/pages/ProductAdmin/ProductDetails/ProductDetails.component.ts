@@ -19,9 +19,14 @@ export class ProductDetailsComponent implements OnInit {
   router = inject(Router);
   product = input<Product>();
   idImage = signal<number>(0);
+  previousImages = signal<string[]>([]);
   isSaved = signal<boolean>(false);
   ngOnInit(): void {
     this.setFormValues(this.product() as any);
+    // Asegurar que idImage esté en 0 si hay imágenes
+    if (this.product()?.images && this.product()!.images.length > 0) {
+      this.idImage.set(0);
+    }
   }
 
   sizes: Size[] = [Size.Xs, Size.S, Size.M, Size.L, Size.Xl, Size.Xxl];
@@ -67,23 +72,35 @@ export class ProductDetailsComponent implements OnInit {
     };
     console.log(productLike);
     if (this.product()?.id === 'new') {
-      this.productsService.createProduct(productLike as Product).subscribe((product) => {
-        console.log(product);
-        this.router.navigate(['/admin/product', product.id]);
-        this.isSaved.set(true);
-        setTimeout(() => {
-          this.isSaved.set(false);
-        }, 3000);
-      });
-    } else {
-      this.productsService
-        .updateProduct(this.product()?.id ?? '', productLike as Product)
-        .subscribe((product) => {
+      this.productsService.createProduct(productLike as Product, this.selectedFiles!).subscribe({
+        next: (product) => {
           console.log(product);
+          this.router.navigate(['/admin/product', product.id]);
           this.isSaved.set(true);
           setTimeout(() => {
             this.isSaved.set(false);
           }, 3000);
+        },
+        error: (error) => {
+          console.error('Error al crear el producto:', error);
+          alert(`Error al crear el producto: ${error.message || error}`);
+        }
+      });
+    } else {
+      this.productsService
+        .updateProduct(this.product()?.id ?? '', productLike as Product, this.selectedFiles!)
+        .subscribe({
+          next: (product) => {
+            console.log(product);
+            this.isSaved.set(true);
+            setTimeout(() => {
+              this.isSaved.set(false);
+            }, 3000);
+          },
+          error: (error) => {
+            console.error('Error al actualizar el producto:', error);
+            alert(`Error al actualizar el producto: ${error.message || error}`);
+          }
         });
     }
   }
@@ -109,6 +126,42 @@ export class ProductDetailsComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (input.files) {
       this.selectedFiles = input.files;
+    }
+    // Procesar las imágenes seleccionadas para preview
+    const files = Array.from(this.selectedFiles ?? []);
+    const previewImages: string[] = [];
+    let completedReads = 0;
+
+    files.forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        previewImages.push(e.target.result);
+        completedReads++;
+
+        // Cuando todas las imágenes se hayan leído, actualizar el producto
+        if (completedReads === files.length) {
+          this.updateProductImages(previewImages);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Método auxiliar para actualizar las imágenes del producto
+  private updateProductImages(newImages: string[]) {
+    const currentProduct = this.product();
+    if (currentProduct) {
+      const previousImagesCount = currentProduct.images?.length || 0;
+      // Crear una nueva referencia del array de imágenes
+      currentProduct.images = [...(currentProduct.images || []), ...newImages];
+
+      // Si no había imágenes previas, mostrar la primera imagen nueva
+      if (previousImagesCount === 0) {
+        this.idImage.set(0);
+      } else {
+        // Si había imágenes previas, mostrar la primera imagen nueva
+        this.idImage.set(previousImagesCount);
+      }
     }
   }
 }

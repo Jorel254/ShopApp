@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Gender, Product, ProductResponse } from '../interfaces/Product';
-import { Observable, of, tap } from 'rxjs';
+import { forkJoin, map, Observable, of, switchMap, tap } from 'rxjs';
 import { environment } from '@/environments/environment';
 import { User } from '@auth/interfaces/User';
 
@@ -82,17 +82,6 @@ export class ProductsService {
     );
   }
 
-  updateProduct(id: string, product: Product): Observable<Product> {
-    return this.http.patch<Product>(`${environment.baseUrl}/products/${id}`, product).pipe(
-      tap((product) => {
-        console.log(product);
-      }),
-      tap((product) => {
-        this.updateProdcutCache(id, product);
-      })
-    );
-  }
-
   updateProdcutCache(id: string, product: Product) {
     this.productCache.set(id, product);
     this.productsCache.forEach((productResponse) => {
@@ -102,11 +91,81 @@ export class ProductsService {
     });
   }
 
-  createProduct(product: Product): Observable<Product> {
-    return this.http.post<Product>(`${environment.baseUrl}/products`, product).pipe(
-      tap((product) => {
-        this.updateProdcutCache(product.id, product);
+  updateProduct(id: string, product: Product, images: FileList): Observable<Product> {
+    if (product.images) {
+      product.images = product.images.filter((image) => !image.includes('data:image/'));
+    }
+    return this.updateProductImages(images).pipe(
+      map((imagesNames) => {
+        return {
+          ...product,
+          images: [...(product.images ?? []), ...imagesNames],
+        };
+      }),
+      switchMap((updatedProduct) => {
+        return this.http
+          .patch<Product>(`${environment.baseUrl}/products/${id}`, updatedProduct)
+          .pipe(
+            tap((product) => {
+              console.log(product);
+            }),
+            tap((product) => {
+              this.updateProdcutCache(id, product);
+            })
+          );
       })
     );
+  }
+
+  createProduct(product: Product, images: FileList): Observable<Product> {
+    if (product.images) {
+      product.images = product.images.filter((image) => !image.includes('data:image/'));
+    }
+    return this.updateProductImages(images).pipe(
+      map((imagesNames) => {
+        return {
+          ...product,
+          images: imagesNames,
+        };
+      }),
+      switchMap((updatedProduct) => {
+        return this.http.post<Product>(`${environment.baseUrl}/products`, updatedProduct).pipe(
+          tap((product) => {
+            console.log(product);
+          }),
+          tap((product) => {
+            this.updateProdcutCache(product.id, product);
+          })
+        );
+      })
+    );
+  }
+
+  updateProductImages(images: FileList): Observable<string[]> {
+    if (images.length === 0 || !images) {
+      return of([]);
+    }
+
+    // Validar tamaño de imágenes (máximo 5MB por imagen)
+    const maxSize = 5 * 1024 * 1024; // 5MB en bytes
+    const invalidFiles = Array.from(images).filter((file) => file.size > maxSize);
+
+    if (invalidFiles.length > 0) {
+      throw new Error(
+        `Las siguientes imágenes exceden el tamaño máximo de 5MB: ${invalidFiles
+          .map((f) => f.name)
+          .join(', ')}`
+      );
+    }
+
+    const uploadObservable = Array.from(images).map((image) => this.updateProductImage(image));
+    return forkJoin(uploadObservable);
+  }
+  updateProductImage(image: File): Observable<string> {
+    const formData = new FormData();
+    formData.append('file', image);
+    return this.http
+      .post<{ fileName: string }>(`${environment.baseUrl}/files/product`, formData)
+      .pipe(map((res: { fileName: string }) => res.fileName));
   }
 }

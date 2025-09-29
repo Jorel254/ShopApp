@@ -10,8 +10,20 @@ export class ImageProductPipe implements PipeTransform {
       return '/assets/images/no-image.jpg';
     }
     if (Array.isArray(value)) {
-      return `${baseUrl}/files/product/${value[index]}`;
+      const imageUrl = value[index];
+      if (!imageUrl) {
+        return '/assets/images/no-image.jpg';
+      }
+      // Si es una imagen base64 (data URL), devolverla directamente
+      if (imageUrl.includes('data:image/')) {
+        return imageUrl;
+      }
+      // Si es una imagen del servidor, construir la URL
+      return `${baseUrl}/files/product/${imageUrl}`;
     } else if (typeof value === 'string') {
+      if (value.includes('data:image/')) {
+        return value;
+      }
       return `${baseUrl}/files/product/${value}`;
     }
     return '/assets/images/no-image.jpg';
